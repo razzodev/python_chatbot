@@ -1,23 +1,26 @@
 from collections import OrderedDict
 import requests
-from api_keys import weather_key
+from datetime import datetime
+# import time
+from api_keys import weather_key, nyt_key
 from metaphone import doublemetaphone
 from location_distance import calc_distance
 
 boto = {
     'location_pending': False,
     'weather_pending': False,
+    'curse_count': 0,
     'user_name': None,
     'animation': '',
     'reply': '',
-    'curse_count': 0,
 }
 
 
 def check_curse(msg):
-    curse_triggers = ['bitch', 'nigger', 'fuck', 'motherfucker', 'shit']
+    curse_triggers = ['nigger', 'fuck', 'shit']
     for w in curse_triggers:
         if doublemetaphone(msg)[0].find(doublemetaphone(w)[0]) != -1:
+
             boto['curse_count'] += 1
             return True
     return False
@@ -119,6 +122,20 @@ def location_distance(msg):
     return boto
 
 
+def check_news(msg):
+    return True if 'news' in msg else False
+
+
+def news(msg):
+    res = requests.get(
+        f'''https://api.nytimes.com/svc/topstories/v2/home.json?api-key={nyt_key}''')
+    result = res.json()['results'][0]
+    article_date = datetime.strptime(
+        result['published_date'], "%Y-%m-%dT%H:%M:%S%z")
+    boto['reply'] = f'''Publised at {article_date} in the New York Times: {result['title']}{result['abstract']}'''
+    return boto
+
+
 all_functions = OrderedDict([
     (check_curse, curse),
     (check_name, name),
@@ -127,5 +144,6 @@ all_functions = OrderedDict([
     (check_city, city),
     (check_init_location, init_location),
     (check_location_distance, location_distance),
+    (check_news, news),
     (check_options, options),
 ])
