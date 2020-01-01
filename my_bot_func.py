@@ -50,7 +50,7 @@ def check_options(msg):
 
 def options(msg):
     boto['animation'] = 'ok'
-    boto['reply'] = ''' Check the current weather at a selected location... Get overused Chuck Norris jokes.'''
+    boto['reply'] = ''' Here are my available commands: 'get the current weather','read a news headline', 'calculate the distance of a location', 'tell a joke' '''
     return boto
 
 
