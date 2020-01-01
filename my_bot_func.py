@@ -1,6 +1,7 @@
 from collections import OrderedDict
 import requests
 from api_keys import weather_key
+from metaphone import doublemetaphone
 from location_distance import calc_distance
 
 boto = {
@@ -16,7 +17,7 @@ boto = {
 def check_curse(msg):
     curse_triggers = ['bitch', 'nigger', 'fuck', 'motherfucker', 'shit']
     for w in curse_triggers:
-        if w in msg:
+        if doublemetaphone(msg)[0].find(doublemetaphone(w)[0]) != -1:
             boto['curse_count'] += 1
             return True
     return False
@@ -112,6 +113,7 @@ def check_location_distance(msg):
 
 
 def location_distance(msg):
+    boto['location_pending'] = False
     reply_distance = calc_distance(msg)
     boto['reply'] = f'''{msg} is {reply_distance}km away'''
     return boto
