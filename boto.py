@@ -2,7 +2,6 @@
 This is the template server side for ChatBot
 """
 from bottle import route, run, template, static_file, request
-# import boto
 import json
 from my_bot_func import *
 
