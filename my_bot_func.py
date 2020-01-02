@@ -6,6 +6,9 @@ from api_keys import weather_key, nyt_key
 from metaphone import doublemetaphone
 from location_distance import calc_distance
 
+boto_images = ['afraid', 'bored', 'confused', 'crying', 'dancing', 'dog', 'excited',
+               'giggling', 'heartbroke', 'inlove', 'laughing', 'money', 'no', 'ok', 'takeoff', 'waiting', ]
+
 boto = {
     'location_pending': False,
     'weather_pending': False,
@@ -17,38 +20,39 @@ boto = {
 
 
 def check_curse(msg):
-    curse_triggers = ['nigger', 'fuck', 'shit']
+    curse_triggers = ['bitch', 'nigger', 'fuck', 'shit', 'cock']
     for w in curse_triggers:
+        # return True if doublemetaphone(msg)[0].find(doublemetaphone(w)[0]) != -1 else False
         if doublemetaphone(msg)[0].find(doublemetaphone(w)[0]) != -1:
-
             boto['curse_count'] += 1
             return True
     return False
 
 
 def curse(msg):
+    # boto['curse_count'] += 1
     boto['animation'] = 'heartbroke'
     boto['reply'] = f'''i don't like your language motherfucker! Strike {boto['curse_count']}'''
     return boto
 
 
 def check_name(msg):
-    return True if boto['user_name'] == None else False
+    return True if boto['user_name'] is None else False
 
 
 def name(msg):
     boto['user_name'] = msg
-    boto['reply'] = f'''Hi {boto['user_name']}, type 'options' to see what i can do'''
+    boto['reply'] = f'''Hi {boto['user_name']}, type 'commands' to see what i can do'''
     boto['animation'] = 'excited'
-    print(boto['user_name'])
+    # print(boto['user_name'])
     return boto
 
 
-def check_options(msg):
-    return True if 'option' in msg else False
+def check_commands(msg):
+    return True if 'commands' in msg else False
 
 
-def options(msg):
+def commands(msg):
     boto['animation'] = 'ok'
     boto['reply'] = ''' Here are my available commands: 'get the current weather','read a news headline', 'calculate the distance of a location', 'tell a joke' '''
     return boto
@@ -57,9 +61,11 @@ def options(msg):
 def check_joke(msg):
     joke_triggers = ['joke', 'funny']
     for j in joke_triggers:
-        if j in msg:
-            return True
-    return False
+        return True if j in msg else False
+    # for j in joke_triggers:
+    #     if j in msg:
+    #         return True
+    # return False
 
 
 def joke(msg):
@@ -73,15 +79,13 @@ def joke(msg):
 def check_weather(msg):
     weather_triggers = ['weather', 'forecast', 'temperature']
     for w in weather_triggers:
-        if w in msg:
-            return True
-    return False
+        return True if w in msg else False
 
 
 def weather(msg):
     boto['weather_pending'] = True
-    boto['animation'] = 'waiting'
-    boto['reply'] = 'where?'
+    boto['animation'] = 'ok'
+    boto['reply'] = 'OK, show you the current weather at?'
     return boto
 
 
@@ -97,7 +101,11 @@ def city(msg):
     weather_main = res.json()['weather'][0]['main']
     high_temp = round(int(res.json()['main']['temp_max']) - to_celcius)
     low_temp = round(int(res.json()['main']['temp_min']) - to_celcius)
-    boto['reply'] = f'''Currently in {msg} the weather is {weather_main}, with temperatures at a high of {high_temp} degrees and at a low of {low_temp} degrees'''
+    boto['animation'] = 'dancing'
+    boto['reply'] = f'''Currently in {msg
+    } the weather is {weather_main
+    }, with temperatures at a high of {high_temp
+    } degrees and at a low of {low_temp} degrees'''
     return boto
 
 
@@ -107,6 +115,7 @@ def check_init_location(msg):
 
 def init_location(msg):
     boto['location_pending'] = True
+    boto['animation'] = 'ok'
     boto['reply'] = 'Ok, calculate the distance to...?'
     return boto
 
@@ -118,6 +127,7 @@ def check_location_distance(msg):
 def location_distance(msg):
     boto['location_pending'] = False
     reply_distance = calc_distance(msg)
+    boto['animation'] = 'takeoff'
     boto['reply'] = f'''{msg} is {reply_distance}km away'''
     return boto
 
@@ -132,7 +142,7 @@ def news(msg):
     result = res.json()['results'][0]
     article_date = datetime.strptime(
         result['published_date'], "%Y-%m-%dT%H:%M:%S%z")
-    boto['reply'] = f'''Publised at {article_date} in the New York Times: {result['title']}{result['abstract']}'''
+    boto['reply'] = f'''Publised at {article_date} in the New York Times: {result['title']}. {result['abstract']}'''
     return boto
 
 
@@ -145,5 +155,5 @@ all_functions = OrderedDict([
     (check_init_location, init_location),
     (check_location_distance, location_distance),
     (check_news, news),
-    (check_options, options),
+    (check_commands, commands),
 ])
