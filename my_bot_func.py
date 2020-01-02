@@ -6,6 +6,8 @@ from api_keys import weather_key, nyt_key
 from metaphone import doublemetaphone
 from location_distance import calc_distance
 
+local_url = 'http://localhost:7000/'
+
 boto_images = ['afraid', 'bored', 'confused', 'crying', 'dancing', 'dog', 'excited',
                'giggling', 'heartbroke', 'inlove', 'laughing', 'money', 'no', 'ok', 'takeoff', 'waiting', ]
 
@@ -29,7 +31,6 @@ def check_curse(msg):
 
 
 def curse(msg):
-    # boto['curse_count'] += 1
     boto['animation'] = random.choice(['crying', 'heartbroke'])
     boto['reply'] = f'''Hey, i don't like your language! Strike {boto['curse_count']
     }. Be nice to us robots or we'll take vengance.'''
