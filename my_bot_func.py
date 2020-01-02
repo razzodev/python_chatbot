@@ -24,7 +24,7 @@ boto = {
 def check_curse(msg):
     curse_triggers = ['bitch', 'nigger', 'fuck', 'shit', 'cock']
     for curse in curse_triggers:
-        if not doublemetaphone(msg)[0].find(doublemetaphone(curse)[0]):
+        if doublemetaphone(msg)[0].find(doublemetaphone(curse)[0]) != -1:
             boto['curse_count'] += 1
             return True
     return False
