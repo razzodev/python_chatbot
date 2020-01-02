@@ -129,7 +129,7 @@ def location_distance(msg):
 
 
 def check_news(msg):
-    return True if 'news' in msg else False
+    return True if 'news' in msg or 'headline' in msg or 'article' in msg else False
 
 
 def news(msg):
