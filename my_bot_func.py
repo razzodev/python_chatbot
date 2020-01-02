@@ -6,8 +6,6 @@ from api_keys import weather_key, nyt_key
 from metaphone import doublemetaphone
 from location_distance import calc_distance
 
-local_url = 'http://localhost:7000/'
-
 boto_images = ['afraid', 'bored', 'confused', 'crying', 'dancing', 'dog', 'excited',
                'giggling', 'heartbroke', 'inlove', 'laughing', 'money', 'no', 'ok', 'takeoff', 'waiting', ]
 
@@ -33,7 +31,7 @@ def check_curse(msg):
 def curse(msg):
     boto['animation'] = random.choice(['crying', 'heartbroke'])
     boto['reply'] = f'''Hey, i don't like your language! Strike {boto['curse_count']
-    }. Be nice to us robots or we'll take vengance.'''
+    }. Be nice to robots or we'll take vengance.'''
     return boto
 
 
@@ -70,9 +68,7 @@ def commands(msg):
 
 
 def check_joke(msg):
-    joke_triggers = ['joke', 'funny']
-    for joke in joke_triggers:
-        return True if joke in msg else False
+    return True if 'joke' in msg or 'funny' in msg else False
 
 
 def joke(msg):
@@ -84,9 +80,7 @@ def joke(msg):
 
 
 def check_weather(msg):
-    weather_triggers = ['weather', 'forecast', 'temperature']
-    for word in weather_triggers:
-        return True if word in msg else False
+    return True if 'weather' in msg or 'forecast' in msg or 'temperature' in msg else False
 
 
 def weather(msg):
