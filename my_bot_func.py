@@ -23,8 +23,8 @@ boto = {
 
 def check_curse(msg):
     curse_triggers = ['bitch', 'nigger', 'fuck', 'shit', 'cock']
-    for w in curse_triggers:
-        if not doublemetaphone(msg)[0].find(doublemetaphone(w)[0]):
+    for curse in curse_triggers:
+        if not doublemetaphone(msg)[0].find(doublemetaphone(curse)[0]):
             boto['curse_count'] += 1
             return True
     return False
@@ -65,14 +65,14 @@ def check_commands(msg):
 
 def commands(msg):
     boto['animation'] = 'excited'
-    boto['reply'] = ''' Here are my available commands: 'get the current weather','read a news headline', 'calculate the distance of a location', 'tell a joke' '''
+    boto['reply'] = '''Here are my available commands: 'get the current weather','read a news headline', 'calculate the distance of a location', 'tell a joke' '''
     return boto
 
 
 def check_joke(msg):
     joke_triggers = ['joke', 'funny']
-    for j in joke_triggers:
-        return True if j in msg else False
+    for joke in joke_triggers:
+        return True if joke in msg else False
 
 
 def joke(msg):
@@ -85,8 +85,8 @@ def joke(msg):
 
 def check_weather(msg):
     weather_triggers = ['weather', 'forecast', 'temperature']
-    for w in weather_triggers:
-        return True if w in msg else False
+    for word in weather_triggers:
+        return True if word in msg else False
 
 
 def weather(msg):

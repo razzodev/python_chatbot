@@ -14,9 +14,9 @@ def index():
 @route("/chat", method='POST')
 def chat():
     user_message = request.POST.get('msg')
-    for k, v in all_functions.items():
-        if k(user_message):
-            v(user_message)
+    for trigger, func in all_functions.items():
+        if trigger(user_message):
+            func(user_message)
             return json.dumps({"animation": boto['animation'], "msg": boto['reply']})
     return json.dumps({"animation": "confused", "msg": '''Oh man, I have nothing to say. Type 'commands' to see what i can do'''})
 
