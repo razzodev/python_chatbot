@@ -1,7 +1,7 @@
 from collections import OrderedDict
 import requests
 from datetime import datetime
-# import time
+import random
 from api_keys import weather_key, nyt_key
 from metaphone import doublemetaphone
 from location_distance import calc_distance
@@ -43,7 +43,7 @@ def check_name(msg):
 def name(msg):
     boto['user_name'] = msg
     boto['reply'] = f'''Hi {boto['user_name']}, type 'commands' to see what i can do'''
-    boto['animation'] = 'excited'
+    boto['animation'] = 'inlove'
     # print(boto['user_name'])
     return boto
 
@@ -53,7 +53,7 @@ def check_commands(msg):
 
 
 def commands(msg):
-    boto['animation'] = 'ok'
+    boto['animation'] = 'excited'
     boto['reply'] = ''' Here are my available commands: 'get the current weather','read a news headline', 'calculate the distance of a location', 'tell a joke' '''
     return boto
 
@@ -62,10 +62,6 @@ def check_joke(msg):
     joke_triggers = ['joke', 'funny']
     for j in joke_triggers:
         return True if j in msg else False
-    # for j in joke_triggers:
-    #     if j in msg:
-    #         return True
-    # return False
 
 
 def joke(msg):
@@ -142,6 +138,7 @@ def news(msg):
     result = res.json()['results'][0]
     article_date = datetime.strptime(
         result['published_date'], "%Y-%m-%dT%H:%M:%S%z")
+    boto['animation'] = random.choice(boto_images)
     boto['reply'] = f'''Publised at {article_date} in the New York Times: {result['title']}. {result['abstract']}'''
     return boto
 
