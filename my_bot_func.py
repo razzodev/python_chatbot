@@ -22,8 +22,7 @@ boto = {
 def check_curse(msg):
     curse_triggers = ['bitch', 'nigger', 'fuck', 'shit', 'cock']
     for w in curse_triggers:
-        # return True if doublemetaphone(msg)[0].find(doublemetaphone(w)[0]) != -1 else False
-        if doublemetaphone(msg)[0].find(doublemetaphone(w)[0]) != -1:
+        if not doublemetaphone(msg)[0].find(doublemetaphone(w)[0]):
             boto['curse_count'] += 1
             return True
     return False
@@ -31,8 +30,20 @@ def check_curse(msg):
 
 def curse(msg):
     # boto['curse_count'] += 1
-    boto['animation'] = 'heartbroke'
-    boto['reply'] = f'''i don't like your language motherfucker! Strike {boto['curse_count']}'''
+    boto['animation'] = random.choice(['crying', 'heartbroke'])
+    boto['reply'] = f'''Hey, i don't like your language! Strike {boto['curse_count']
+    }. Be nice to us robots or we'll take vengance.'''
+    return boto
+
+
+def check_sorry(msg):
+    return True if 'sorry' in msg or 'forgive' in msg or 'apologize' in msg else False
+
+
+def sorry(msg):
+    boto['curse_count'] = 0
+    boto['animation'] = 'inlove'
+    boto['reply'] = f'''OK, i forgive you {boto['user_name']}.'''
     return boto
 
 
@@ -44,7 +55,6 @@ def name(msg):
     boto['user_name'] = msg
     boto['reply'] = f'''Hi {boto['user_name']}, type 'commands' to see what i can do'''
     boto['animation'] = 'inlove'
-    # print(boto['user_name'])
     return boto
 
 
@@ -145,6 +155,7 @@ def news(msg):
 
 all_functions = OrderedDict([
     (check_curse, curse),
+    (check_sorry, sorry),
     (check_name, name),
     (check_joke, joke),
     (check_weather, weather),
