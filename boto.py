@@ -18,7 +18,7 @@ def chat():
         if k(user_message):
             v(user_message)
             return json.dumps({"animation": boto['animation'], "msg": boto['reply']})
-    return json.dumps({"animation": "confused", "msg": '''Oh man, I have nothing to say. Type 'options' to see what i can do'''})
+    return json.dumps({"animation": "confused", "msg": '''Oh man, I have nothing to say. Type 'commands' to see what i can do'''})
 
 
 @route("/test", method='POST')
